@@ -1,6 +1,6 @@
 ![FNinjalgo](https://github.com/Fekerineamar/Fekerineamar/blob/master/img/ninja6.png)
 
-FTPNinja is a powerful tool for automating FTP login attempts and checking the success of login without credentials. It provides a convenient way to test and validate FTP login  for multiple IP addresses.
+FTPNinja is a powerful tool for automating FTP login attempts and checking the success of login without credentials. It provides a convenient way to test and validate FTP login for multiple IP addresses.
 
 ## Installation
 
@@ -9,9 +9,9 @@ FTPNinja is a powerful tool for automating FTP login attempts and checking the s
    git clone https://github.com/Fekerineamar/FTPNinja.git
    ```
 
-2. Install the required dependencies:
+2. Change To Directory:
    ```
-   pip install -r requirements.txt
+   cd FTPNinja
    ```
 
 ## Usage
@@ -47,3 +47,12 @@ FTPNinja supports multiple ways to provide IP addresses for FTP login attempts. 
 ## Output
 
 FTPNinja will perform FTP login attempts for the provided IP addresses and display the success messages. If an output file is specified, the success messages will be saved to the file.
+
+- Happy Hacking ☠
+
+- ツ Don't Forget To Follow Me ツ
+<br>
+
+[![facebook](https://img.shields.io/badge/-Facebook-1877F2?style=for-the-badge&logo=Figma&logoColor=eeffff)](https://www.facebook.com/cody4code)
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=eeffff)](https://github.com/FekerineAmar/)
+[![Website](https://img.shields.io/badge/-Website-181717?style=for-the-badge&logo=Internet-Archive&logoColor=eeffff)](https://developer.x10.mx/)
