@@ -1,6 +1,25 @@
-![FNinjalgo](https://github.com/Fekerineamar/Fekerineamar/blob/master/img/ninja6.png)
+![FNinjalgo](https://github.com/Fekerineamar/Fekerineamar/blob/master/img/FNINJA.png)
 
 FTPNinja is a powerful tool for automating FTP login attempts and checking the success of login without credentials. It provides a convenient way to test and validate FTP login for multiple IP addresses.
+
+## Key Features
+* FTP Connection: FTP Ninja allows users to establish FTP connections with remote servers.
+
+* IP Validation: The tool validates the provided IP addresses to ensure they are valid and properly formatted.
+
+* FTP Server Validation: FTP Ninja checks if the provided IP address corresponds to a valid FTP server.
+
+* Login Authentication: FTP Ninja supports login operations to authenticate with the FTP server.
+
+* Status Reporting: The tool provides detailed status reports for successful logins, login failures, and connection errors.
+
+* Output Logging: FTP Ninja allows users to specify an output file to log successful login attempts.
+
+* Command-line Interface: FTP Ninja has a command-line interface that supports different command-line options for specifying IP addresses, IP lists, and output files.
+
+* Help Documentation: The tool includes a help message that provides information on how to use the command-line options.
+
+These features make FTP Ninja a versatile tool for managing FTP connections, validating IP addresses, and performing FTP operations.
 
 ## Installation
 
@@ -18,7 +37,23 @@ FTPNinja is a powerful tool for automating FTP login attempts and checking the s
 
 FTPNinja supports multiple ways to provide IP addresses for FTP login attempts. Choose the method that suits your needs:
 
+```
+usage: ftpNinja.py [-h] [-l ipList.txt] [-d IP] [-o output.txt]
+
+FTP Tool
+
+options:
+  -h, --help            show this help message and exit
+  -l ipList.txt, --list ipList.txt
+                        File containing a list of IP addresses
+  -d IP, --single-ip IP
+                        Single IP address
+  -o output.txt, --output output.txt
+                        Output file
+```
+
 ### Method 1: List of IP addresses
+* Note: Use Python 3.7+
 
 1. Prepare a text file (`ipList.txt`) containing a list of IP addresses, with each IP address on a separate line.
 
@@ -44,6 +79,13 @@ FTPNinja supports multiple ways to provide IP addresses for FTP login attempts. 
    ```
    Replace `ipList.txt` with the path to your IP address list file, and `output.txt` with the desired output file name.
 
+## Example 
+   ```
+   cat ipList.txt | python3 ftpNinja.py 
+   ```
+   ![example](https://github.com/Fekerineamar/Fekerineamar/blob/master/img/e.g.png)
+   ![example](https://github.com/Fekerineamar/Fekerineamar/blob/master/img/Fwget.png)
+   
 ## Output
 
 FTPNinja will perform FTP login attempts for the provided IP addresses and display the success messages. If an output file is specified, the success messages will be saved to the file.
