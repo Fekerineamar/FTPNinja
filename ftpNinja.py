@@ -1,13 +1,15 @@
 import argparse
 import socket
-from ftplib import FTP
+import signal
+import time
 import sys
 import os
-import subprocess
+import re
+import ftplib
 
 def logo():
     os.system("clear")
-    print("\033[38;5;111m") 
+    print("\033[38;5;111m")
     print("""
            _____________  _  ___        _     
           / __/_  __/ _ \/ |/ (_)__    (_)__ _
@@ -16,9 +18,10 @@ def logo():
                                   |___/       
                           By Cody4code v1.0.1
     """)
-    print("\033[0m") 
+    print("\033[0m")
 
-logo()
+
+
 def is_valid_ip(ip):
     try:
         socket.inet_aton(ip)
@@ -26,74 +29,111 @@ def is_valid_ip(ip):
     except socket.error:
         return False
 
-def is_ip_reachable(ip, timeout=3):
+
+def get_status_from_exception(exception):
+    pattern = r"\b(\d{3})\b"
+    match = re.search(pattern, str(exception))
+    if match:
+        return match.group()
+    else:
+        return ""
+
+
+def is_valid_ftp_ip(ip, timeout=3):
     try:
         socket.setdefaulttimeout(timeout)
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((ip, 21))
-        return True
+        with ftplib.FTP(ip) as ftp:
+            return True
+    except ftplib.error_perm as e:
+        if "No connections allowed from your IP" in str(e):
+            return "NOT_ALLOWED"
+        else:
+            raise
     except (socket.timeout, socket.error):
         return False
 
+
 def connect_ftp(ip, output_file):
-    if not is_valid_ip(ip):
-        print(f"Invalid IP: {ip}")
-        return
-
-    if not is_ip_reachable(ip):
-        print(f"No response from IP: {ip}")
-        return
-
     try:
-        ftp = FTP()
-        ftp.connect(ip)
-        ftp.login()
-        print(f"Successful login for IP: {ip}")
+        if not is_valid_ip(ip):
+            print(f" Invalid IP: \033[38;5;196m{ip}\033[0m Address")
+            return
+        elif not is_valid_ftp_ip(ip):
+            print(f" Invalid FTP IP: \033[38;5;196m{ip}\033[0m Address")
+            return
+        elif is_valid_ftp_ip(ip) == "NOT_ALLOWED":
+            print(f" Error connecting to {ip}: [\033[38;5;203m550\033[0m] No connections allowed from your IP")
+            return
+
+        with ftplib.FTP(ip) as ftp:
+            ftp.login()
+        print(f" Successfully logged in to IP: {ip} \033[38;5;82m[200]\033[0m \033[38;5;111mLogin Success\033[0m")
         if output_file is not None:
-            output_file.write(f"Successful login for IP: {ip}\n")
-        ftp.quit()
+            output_file.write(f" Successfully logged in to IP: {ip}\n")
+    except ftplib.error_perm as e:
+        status = get_status_from_exception(e)
+        if status:
+            print(f" Error connecting to {ip}: [\033[38;5;203m{status}\033[0m] \033[91m{str(e)[len(status)+1:]}\033[0m")
+    except (socket.timeout, socket.error):
+        print(f" Error connecting to {ip}: \033[38;5;203mConnection timed out or socket error\033[0m")
     except Exception as e:
+        status = get_status_from_exception(e)
+        if status:
+            print(f" Error connecting to {ip}: [\033[38;5;203m{status}\033[0m] \033[91m{str(e)[len(status)+1:]}\033[0m")
         if output_file is not None:
-            output_file.write(f"Error connecting to {ip}: {str(e)}\n")
+            output_file.write(f" An unexpected error occurred while connecting to {ip}: {str(e)}\n")
+
 
 def process_ips(ip_list, output_file):
     for ip in ip_list:
         connect_ftp(ip, output_file)
 
+parser = argparse.ArgumentParser(description='FTP Tool')
+parser.add_argument('-l', '--list', metavar='ipList.txt', help='File containing a list of IP addresses')
+parser.add_argument('-d', '--single-ip', metavar='IP', help='Single IP address')
+parser.add_argument('-o', '--output', metavar='output.txt', type=str, help='Output file')
+
+
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='FTP Tool')
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-l', '--list', metavar='ipList.txt', help='File containing list of IP addresses')
-    group.add_argument('-d', '--single-ip', metavar='IP', help='Single IP address')
-    parser.add_argument('-o', '--output', metavar='output.txt', type=str, help='Output file')
     args = parser.parse_args()
-
-    if not args.list and not args.single_ip:
-        # Read from stdin
-        ip_list = sys.stdin.read().splitlines()
-    elif args.list and not args.list.strip():
-        parser.error('No input file provided with -l/--list')
-    elif args.list:
+    ip_list = []
+    if args.list:
         with open(args.list, 'r') as ip_file:
-            ip_list = ip_file.read().splitlines()
-    else:
-        ip_list = [args.single_ip]
-
+            ip_list = [line.strip() for line in ip_file if is_valid_ip(line.strip())]
+    elif not sys.stdin.isatty():
+        ip_list = [line.strip() for line in sys.stdin if is_valid_ip(line.strip())]
+    if args.single_ip:
+        ip_list.append(args.single_ip)
     return args, ip_list
 
 def main():
     args, ip_list = parse_arguments()
-
+    if args.list:
+        print(f" \033[0;33mIP_List: {args.list}\033[0m")
+        with open(args.list, 'r') as ip_file:
+            lines = sum(1 for _ in ip_file)
+        print(f" \033[0;36mSize: {lines} IP lines\033[0m")
+    elif not sys.stdin.isatty():
+        print(f" \033[0;33mIP_List: {args.list}\033[0m")
+        lines = sum(1 for _ in sys.stdin)
+        print(f" \033[0;36mSize: {lines} IP lines\033[0m")
     output_file = None
     if args.output:
         output_file = open(args.output, 'w')
+    if not sys.stdin.isatty() or args.list or args.single_ip:
+        print(f" \033[0;32m[{time.strftime('%Y-%m-%d %H:%M:%S')}] Starting...\033[0m")
 
-    process_ips(ip_list, output_file)
-
+        try:
+            process_ips(ip_list, output_file)
+        except KeyboardInterrupt:
+            print("\n\033[48;2;255;0;0m\033[38;2;255;255;255mCanceled by user.\033[0m")
+    else:
+        parser.print_help()
     if output_file:
         output_file.close()
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        sys.argv.append('--help')
+    logo()
     main()
+
 
