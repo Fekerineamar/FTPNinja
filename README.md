@@ -70,7 +70,7 @@ optional arguments:
 
 1. Run FTPNinja with a single IP address:
    ```
-   python3 ftpNinja.py -d 192.168.1.1 -o output.txt
+   python3 ftpNinja.py -ip 192.168.1.1 -o output.txt
    ```
    Replace `192.168.1.1` with the IP address you want to test, and `output.txt` with the desired output file name.
 
@@ -82,6 +82,13 @@ optional arguments:
    ```
    Replace `ipList.txt` with the path to your IP address list file, and `output.txt` with the desired output file name.
 
+### Brute Forcing:
+
+1. Run FTPNinja with a -w wordlist:
+   ```
+   python3 ftpNinja.py -ip 192.168.1.1 -w wordlist.txt
+   ```
+   
 ## Example 
    ```
    cat ipList.txt | python3 ftpNinja.py 
