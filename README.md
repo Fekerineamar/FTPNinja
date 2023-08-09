@@ -84,7 +84,7 @@ optional arguments:
 
 ### Brute Forcing:
 
-1. Run FTPNinja with a -w wordlist:
+1. Run FTPNinja with a -w wordlist to brute force with wordlist:
    ```
    python3 ftpNinja.py -ip 192.168.1.1 -w wordlist.txt
    ```
