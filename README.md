@@ -84,11 +84,13 @@ optional arguments:
 
 ### Brute Forcing:
 
-1. Run FTPNinja with a -w wordlist to brute force with wordlist:
+1. Run FTPNinja with a -w wordlist to brute force username & password:
    ```
    python3 ftpNinja.py -ip 192.168.1.1 -w wordlist.txt
    ```
-   
+  Replace `wordlist.txt` with the path to your username:password list
+  Note: the list must contain user and pass like (i.e root:toor)
+
 ## Example 
    ```
    cat ipList.txt | python3 ftpNinja.py 
@@ -100,9 +102,9 @@ optional arguments:
 
 FTPNinja will perform FTP login attempts for the provided IP addresses and display the success messages. If an output file is specified, the success messages will be saved to the file.
 
-- Happy Hacking ☠
+- 🕷️ Happy Hacking 🕷️
 
-- ツ Don't Forget To Follow Me ツ
+- ツ Don't Forget To Follow Me ツ 
 <br>
 
 [![facebook](https://img.shields.io/badge/-Facebook-1877F2?style=for-the-badge&logo=Figma&logoColor=eeffff)](https://www.facebook.com/profile.php?id=100076323828870)
