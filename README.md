@@ -38,18 +38,21 @@ These features make FTP Ninja a versatile tool for managing FTP connections, val
 FTPNinja supports multiple ways to provide IP addresses for FTP login attempts. Choose the method that suits your needs:
 
 ```
-usage: ftpNinja.py [-h] [-l ipList.txt] [-d IP] [-o output.txt]
+usage: ftpNinja.py [-h] [-l ipList.txt] [-ip IP] [-w wordlist.txt] [-o output.txt]
 
 FTP Tool
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -l ipList.txt, --list ipList.txt
                         File containing a list of IP addresses
-  -d IP, --single-ip IP
+  -ip IP, --single-ip IP
                         Single IP address
+  -w wordlist.txt, --wordlist wordlist.txt
+                        File containing usernames and passwords separated by ":"
   -o output.txt, --output output.txt
                         Output file
+
 ```
 
 ### Method 1: List of IP addresses
